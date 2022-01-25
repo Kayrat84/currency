@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>run.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+run.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">bs4 </span><span class="s0">import </span><span class="s1">BeautifulSoup </span><span class="s0">as </span><span class="s1">bs</span>
+<span class="s0">import </span><span class="s1">requests </span><span class="s0">as </span><span class="s1">rq</span>
+<span class="s0">import </span><span class="s1">pandas </span><span class="s0">as </span><span class="s1">pd</span>
+<span class="s0">from </span><span class="s1">datetime </span><span class="s0">import </span><span class="s1">date</span>
+<span class="s1">dt = date.today()</span>
+<span class="s1">site = rq.get(</span><span class="s2">'https://cbr.ru/currency_base/dynamics/?UniDbQuery.Posted=True&amp;UniDbQuery.so=1&amp;UniDbQuery.mode=1&amp;UniDbQuery.date_req1=&amp;UniDbQuery.date_req2=&amp;UniDbQuery.VAL_NM_RQ=R01375&amp;UniDbQuery.From=19.01.2021&amp;UniDbQuery.To='</span><span class="s1">+</span><span class="s2">'.'</span><span class="s1">.join(str(dt).split(</span><span class="s2">'-'</span><span class="s1">)[::-</span><span class="s3">1</span><span class="s1">]))</span>
+<span class="s1">soup = bs(site.text)</span>
+<span class="s1">dat = soup.find_all(</span><span class="s2">'td'</span><span class="s1">)</span>
+<span class="s1">dct = {dat[i].text: dat[i+</span><span class="s3">2</span><span class="s1">].text </span><span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range(</span><span class="s3">1</span><span class="s0">, </span><span class="s1">len(dat)-</span><span class="s3">2</span><span class="s0">, </span><span class="s3">3</span><span class="s1">)}</span>
+<span class="s1">df = pd.DataFrame(list(dct.items())</span><span class="s0">, </span><span class="s1">columns=[</span><span class="s2">'Дата'</span><span class="s0">, </span><span class="s2">'Курс'</span><span class="s1">])</span>
+<span class="s1">print(df)</span></pre>
+</body>
+</html>
